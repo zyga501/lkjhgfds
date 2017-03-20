@@ -1,0 +1,22 @@
+<project>
+    <id>1629719047391232</id>
+    <name>cicipay</name>
+    <serverAddress>127.0.0.1</serverAddress>
+    <idWorkerSeed>1</idWorkerSeed>
+    <Picpath>D:\\QiLian\\</Picpath>
+    <hostip>192.168.1.102</hostip>
+    <menulist>
+        <menuitem>
+            <title>首页</title>
+            <pagepath>chocolate syrup or chocolate fudge</pagepath>
+        </menuitem>
+        <menuitem>
+            <title>交易所</title>
+            <pagepath>nuts</pagepath>
+        </menuitem>
+        <menuitem>
+            <title>公房</title>
+            <pagepath>cherry</pagepath>
+        </menuitem>
+    </menulist>
+</project>

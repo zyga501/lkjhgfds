@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlfg.database.esf.mapping.houseinfo">
+    <select id="getUncheckHouseInfo"   parameterType="String"   resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo_gzk where status=1   and zid=#{zid}
+    </select>
+
+    <select id="getUnpostHouseInfo"  parameterType="String"  resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo_gzk where status=0 and zid=#{zid};
+    </select>
+
+    <select id="getOnlineHouseInfo" parameterType="String" resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo where status=0 and zid=#{zid}
+    </select>
+
+    <select id="getUnlineHouseInfo" parameterType="String" resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo where status=1  and zid=#{zid}
+    </select>
+
+    <select id="getSeq" parameterType="java.util.HashMap" resultType="String">
+        select  seq from sqlite_sequence where  name=#{tabname};
+    </select>
+
+    <insert id="insertHouseInfo" parameterType="com.wlfg.database.esf.HouseInfo" >
+        insert into  esf_houseinfo_gzk
+          (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
+          values (#{hid},#{ssq},#{xq},#{fwjg},#{hx_s},#{hx_t},#{hx_w},#{jzmj},#{zcs},#{szc},#{cx},#{jcnf},#{lx},#{yt},
+          #{syqx},#{tdxz},#{cqz},#{zid},#{openid},#{status},#{sjdate},#{xjdate})
+    </insert>
+
+    <update id="checkHouseInfo" parameterType="com.wlfg.database.MenuTree" >
+        insert into esf_houseinfo (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
+          select (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
+          from esf_houseinfo_gzk a where a.hid=#{hid}
+    </update>
+
+    <delete id="delUnpostHouseInfo" parameterType="String">
+        delete  from esf_houseinfo_gzk where status='0' and zid=#{zid}
+    </delete>
+    <resultMap type="com.wlfg.database.esf.HouseInfo" id="houseInfoResult">
+        <id property="id" column="id" jdbcType="BIGINT" />
+        <result property="hid" column="hid" jdbcType="VARCHAR"/>
+        <result property="ssq" column="ssq" jdbcType="VARCHAR"/>
+        <result property="xq" column="xq" jdbcType="VARCHAR"/>
+        <result property="fwjg" column="fwjg" jdbcType="VARCHAR"/>
+        <result property="hx_s" column="hx_s" jdbcType="VARCHAR"/>
+        <result property="hx_t" column="hx_t" jdbcType="VARCHAR"/>
+        <result property="hx_w" column="hx_w" jdbcType="VARCHAR"/>
+        <result property="jzmj" column="jzmj" jdbcType="VARCHAR"/>
+        <result property="zcs" column="zcs" jdbcType="VARCHAR"/>
+        <result property="szc" column="szc" jdbcType="VARCHAR"/>
+        <result property="cx" column="cx" jdbcType="VARCHAR"/>
+        <result property="jcnf" column="jcnf" jdbcType="VARCHAR"/>
+        <result property="lx" column="lx" jdbcType="VARCHAR"/>
+        <result property="yt" column="yt" jdbcType="VARCHAR"/>
+        <result property="syqx" column="syqx" jdbcType="VARCHAR"/>
+        <result property="tdxz" column="tdxz" jdbcType="VARCHAR"/>
+        <result property="cqz" column="cqz" jdbcType="VARCHAR"/>
+        <result property="zid" column="zid" jdbcType="VARCHAR"/>
+        <result property="openid" column="openid" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="sjdate" column="sjdate" jdbcType="VARCHAR"/>
+        <result property="xjdate" column="xjdate" jdbcType="VARCHAR"/>
+    </resultMap>
+</mapper>
