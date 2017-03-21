@@ -12,7 +12,7 @@
 <div class="panel-body">
     <div class="row">
         <span id="btnstep1" class="center-block btn btn-warning col-sm-6" onclick="pre()">第一步<br>二手房信息</span>
-        <span id="btnstep2" class="center-block btn btn-default col-sm-6" disabled onclick="ntt()"> 第二步<br>审核信息</span>
+        <span id="btnstep2" class="center-block btn btn-default col-sm-6"  onclick="ntt()"> 第二步<br>审核信息</span>
     </div>
     <input type="hidden" id="gid" name="gid" value="">
 
@@ -201,6 +201,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">房产/不动产证号</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="" name="cqz">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-sm-2">宣传照</label>
 
                 <div class="col-sm-10">
@@ -212,13 +219,6 @@
     <div class="form-horizontal" id="step2" style="display:none">
         <form class="form-horizontal adminex-form" id="form2">
             <input hidden name="hid" id="hid">
-            <div class="form-group">
-                <label class="col-sm-2 control-label">房产/不动产证号</label>
-
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="" name="cqz">
-                </div>
-            </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">审核用</label><span>  请上传【房产证】或【不动产证】可多张！</span>
                 <div class="col-sm-10">
@@ -258,15 +258,22 @@
     }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
         var form = data.form, files = data.files, extra = data.extra,
                 response = data.response, reader = data.reader;
-        alert('File batch upload success');
-        alert(JSON.stringify(data));
-        $("#hid").val(data.hid);
-        $("#btnstep2").attr("disabled", false);
-        $("#step1").css("display", "none");
-        $("#step2").css("display", "block");
-        $("#btnstep1").attr("class", "center-block btn btn-default col-sm-6");
-        $("#btnstep2").attr("class", "center-block btn btn-warning col-sm-6");
-    }); ;
+        if ($.parseJSON(response).resultCode=="Succeed") {
+            $("#hid").val($.parseJSON(response).hid);
+            $("#btnstep2").attr("disabled", false);
+            $("#step1").css("display", "none");
+            $("#step2").css("display", "block");
+            $("#btnstep1").attr("class", "center-block btn btn-default col-sm-6");
+            $("#btnstep2").attr("class", "center-block btn btn-warning col-sm-6");
+        }
+        else{
+            alert($.parseJSON(response).msg);
+        }
+    }).on('filepreupload', function(event, data, previewId, index) {
+        var form = data.form, files = data.files, extra = data.extra,
+                response = data.response, reader = data.reader;
+        alert(JSON.stringify(event));
+    });;
 
     function ntt() {
         if ($("#btnstep2").attr("disabled") != "disabled") {

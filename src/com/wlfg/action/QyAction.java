@@ -11,6 +11,7 @@ import utils.ProjectSettings;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -113,11 +114,22 @@ public class QyAction extends AjaxActionSupport {
     /*循环验证*/
     public String pclogin(){
         String  uuid = getParameter("uuid").toString();
-        if ((null!=getApplication().get(uuid)) && ((boolean)getApplication().get(uuid))){
-            Map map = (Map)getApplication().get(getParameter("uuid")+"userinfo");
-            getApplication().remove(uuid);
-            getApplication().remove(uuid+"userinfo");
-            return AjaxActionComplete (true,map);
+        Date dt =new Date();
+        while  ((new Date()).getTime()-dt.getTime()<50000){
+            if ((null!=getApplication().get(uuid)) && ((boolean)getApplication().get(uuid))) {
+                Map map = (Map) getApplication().get(getParameter("uuid") + "userinfo");
+                getRequest().getSession().setAttribute("userinfo",map);
+                getApplication().remove(uuid);
+                getApplication().remove(uuid + "userinfo");
+                map.clear();
+                map.put("href","<%=request.getContextPath()%>/esf/addhouse.jsp");
+                return AjaxActionComplete(true, map);
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return AjaxActionComplete (false);
     }
@@ -134,7 +146,8 @@ public class QyAction extends AjaxActionSupport {
 
     public void checkzj() throws IOException {
         if (null!=getRequest().getSession().getAttribute("openid") && (null!=getParameter("uuid"))) {
-            getApplication().put(getParameter("uuid"),true);        try {
+            getApplication().put(getParameter("uuid"),true);
+            try {
             QYUserIdInfo qyUserIdInfo = new QYUserIdInfo(QYAccessToken.getQYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString()),
                     getRequest().getSession().getAttribute("openid").toString());
             if (qyUserIdInfo.getRequest()) {

@@ -1,22 +1,10 @@
 <project>
     <id>1629719047391232</id>
-    <name>cicipay</name>
-    <serverAddress>127.0.0.1</serverAddress>
     <idWorkerSeed>1</idWorkerSeed>
     <Picpath>D:\\QiLian\\</Picpath>
     <hostip>192.168.1.102</hostip>
-    <menulist>
-        <menuitem>
-            <title>首页</title>
-            <pagepath>chocolate syrup or chocolate fudge</pagepath>
-        </menuitem>
-        <menuitem>
-            <title>交易所</title>
-            <pagepath>nuts</pagepath>
-        </menuitem>
-        <menuitem>
-            <title>公房</title>
-            <pagepath>cherry</pagepath>
-        </menuitem>
-    </menulist>
+    <weixinServerInfo>
+        <qyappid>wxd8913b7903abf17f</qyappid>
+        <qyappSecret>bHEzpe1tjFMj6YLurU6WpTPgbV9dN7-6jmTfLmL4LC5fqObk80CbpgtkI8C9sZpe</qyappSecret>
+    </weixinServerInfo>
 </project>

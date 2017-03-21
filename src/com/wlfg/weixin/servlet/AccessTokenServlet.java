@@ -16,14 +16,17 @@ public class AccessTokenServlet extends HttpServlet {
         public void run() {
             while (true) {
                 try {
-                    List<AccessToken> appidList = new ArrayList<>();
-                    appidList.add(new AccessToken(ProjectSettings.getMapData("weixinServerInfo").get("appid").toString(), ProjectSettings.getMapData("weixinServerInfo").get("appSecret").toString()));
-                    AccessToken.updateAccessToken(appidList);
-                    JsapiTicketUtil.updateJsApiTicket(ProjectSettings.getMapData("weixinServerInfo").get("appid").toString());
-
-                    List<QYAccessToken> qyappidList = new ArrayList<>();
-                    qyappidList.add(new QYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString(), ProjectSettings.getMapData("weixinServerInfo").get("qyappSecret").toString()));
-                    QYAccessToken.updateQYAccessToken(qyappidList);
+                    if (ProjectSettings.getMapData("weixinServerInfo").get("appid")!=null) {
+                        List<AccessToken> appidList = new ArrayList<>();
+                        appidList.add(new AccessToken(ProjectSettings.getMapData("weixinServerInfo").get("appid").toString(), ProjectSettings.getMapData("weixinServerInfo").get("appSecret").toString()));
+                        AccessToken.updateAccessToken(appidList);
+                        JsapiTicketUtil.updateJsApiTicket(ProjectSettings.getMapData("weixinServerInfo").get("appid").toString());
+                    }
+                    if (ProjectSettings.getMapData("weixinServerInfo").get("qyappid")!=null) {
+                        List<QYAccessToken> qyappidList = new ArrayList<>();
+                        qyappidList.add(new QYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString(), ProjectSettings.getMapData("weixinServerInfo").get("qyappSecret").toString()));
+                        QYAccessToken.updateQYAccessToken(qyappidList);
+                    }
                     // 休眠7000秒
                     Thread.sleep((DEFAULTEXPIRESTIME - 200) * 1000);
                 }

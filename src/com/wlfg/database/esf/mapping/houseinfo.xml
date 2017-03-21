@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wlfg.database.esf.mapping.houseinfo">
-    <select id="getUncheckHouseInfo"   parameterType="String"   resultMap="houseInfoResult">
-        SELECT * FROM esf_houseinfo_gzk where status=1   and zid=#{zid}
+    <select id="getUncheckHouseInfo"   parameterType="java.util.HashMap"   resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo_gzk where status=1  <if test="null!=zid"> and zid=#{zid}</if> <if test="null!=hid">
+          and hid=#{hid}</if> <if test="null!=openid"> and openid=#{openid}</if>
     </select>
 
-    <select id="getUnpostHouseInfo"  parameterType="String"  resultMap="houseInfoResult">
-        SELECT * FROM esf_houseinfo_gzk where status=0 and zid=#{zid};
+    <select id="getUnpostHouseInfo"  parameterType="java.util.HashMap"  resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo_gzk where status=0 <if test="null!=zid"> and zid=#{zid}</if> <if test="null!=hid"> and hid=#{hid}</if>
     </select>
 
-    <select id="getOnlineHouseInfo" parameterType="String" resultMap="houseInfoResult">
-        SELECT * FROM esf_houseinfo where status=0 and zid=#{zid}
+    <select id="getOnlineHouseInfo" parameterType="java.util.HashMap" resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo where status=0  <if test="null!=zid"> and zid=#{zid}</if> <if test="null!=hid"> and hid=#{hid}</if>
     </select>
 
-    <select id="getUnlineHouseInfo" parameterType="String" resultMap="houseInfoResult">
-        SELECT * FROM esf_houseinfo where status=1  and zid=#{zid}
+    <select id="getOfflineHouseInfo" parameterType="java.util.HashMap" resultMap="houseInfoResult">
+        SELECT * FROM esf_houseinfo where status=1  <if test="null!=zid"> and zid=#{zid}</if> <if test="null!=hid"> and hid=#{hid}</if>
     </select>
 
     <select id="getSeq" parameterType="java.util.HashMap" resultType="String">

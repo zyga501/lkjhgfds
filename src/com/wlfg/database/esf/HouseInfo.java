@@ -3,23 +3,24 @@ package com.wlfg.database.esf;
 import com.wlfg.database.Database;
 
 import java.util.List;
+import java.util.Map;
 
 public class HouseInfo {
-    public static List<HouseInfo> getUncheckHouseInfo(String zid) {
+    public static List<HouseInfo> getUncheckHouseInfo(Map map) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.getUncheckHouseInfo";
-        return Database.Instance().selectList(statement,zid);
+        return Database.Instance().selectList(statement,map);
     }
-    public static List<HouseInfo> getUnpostHouseInfo(String zid) {
+    public static List<HouseInfo> getUnpostHouseInfo(Map map) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.getUnpostHouseInfo";
-        return Database.Instance().selectList(statement,zid);
+        return Database.Instance().selectList(statement,map);
     }
-    public static List<HouseInfo> getOnlineHouseInfo(String zid) {
+    public static List<HouseInfo> getOnlineHouseInfo(Map map) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.getOnlineHouseInfo";
-        return Database.Instance().selectList(statement,zid);
+        return Database.Instance().selectList(statement,map);
     }
-    public static List<HouseInfo> getUnlineHouseInfo(String zid) {
-        String statement = "com.wlfg.database.esf.mapping.houseinfo.getUnlineHouseInfo";
-        return Database.Instance().selectList(statement,zid);
+    public static List<HouseInfo> getOfflineHouseInfo(Map map) {
+        String statement = "com.wlfg.database.esf.mapping.houseinfo.getOfflineHouseInfo";
+        return Database.Instance().selectList(statement,map);
     }
     public static Boolean insertHouseInfo(HouseInfo houseinfo) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.insertHouseInfo";
