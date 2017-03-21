@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlfg.database.esf.mapping.agencyinfo">
+    <select id="fetchAgency"   parameterType="String"   resultMap="agencyInfoResult">
+        SELECT * FROM esf_agencytab where  userid=#{userid}
+    </select>
+    <select id="fetchAM"   parameterType="String"   resultType="java.util.HashMap">
+        SELECT * FROM esf_agencymanager where   userid=#{userid}
+    </select>
+
+    <resultMap type="com.wlfg.database.esf.AgencyInfo" id="agencyInfoResult">
+        <id property="zid" column="zid" jdbcType="BIGINT" />
+        <result property="agency" column="hid" jdbcType="VARCHAR"/>
+        <result property="address" column="ssq" jdbcType="VARCHAR"/>
+        <result property="tel" column="xq" jdbcType="VARCHAR"/>
+        <result property="useid" column="fwjg" jdbcType="VARCHAR"/>
+    </resultMap>
+</mapper>

@@ -30,14 +30,18 @@
         <result name="ajaxActionCompleted" type="json">
             <param name="root">ajaxActionResult</param>
         </result>
-        <result name="page404">./page404.jsp</result>
+        <result name="page404">../page404.jsp</result>
     </global-results>
     <!-- compatible api -->
         <action name="*!html" class="com.wlfg.action.HtmlAction" method="{1}">
             <result name="mainpage" >./mainpage.jsp</result>
         </action>
         <action name="*!esf" class="com.wlfg.action.EsfAction" method="{1}">
+            <result name="addHousePage" >addhouse.jsp</result>
+            <result name="checkList" >unchecklist.jsp</result>
+            <result name="agencyHouseList" >agencyHouseList.jsp</result>
             <result name="mainpage" >./mainpage.jsp</result>
+            <result name="fetchWxCode" type="chain" >QYAct!fetchWxCode</result>
         </action>
         <action name="QYAct!*" class="com.wlfg.action.QyAction" method="{1}">
             <result name="fetchWxCode" type="chain" >QYAct!fetchWxCode</result>

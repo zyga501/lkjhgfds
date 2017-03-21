@@ -232,6 +232,14 @@ public class HouseInfo {
         this.zid = zid;
     }
 
+    public String getJg() {
+        return jg;
+    }
+
+    public void setJg(String jg) {
+        this.jg = jg;
+    }
+
     private long id;
     private String hid;
     private String ssq;
@@ -255,6 +263,7 @@ public class HouseInfo {
     private String sjdate;
     private String xjdate;
     private String zid;
+    private String jg;
 
 
 }

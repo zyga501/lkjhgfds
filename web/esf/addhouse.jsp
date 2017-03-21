@@ -190,8 +190,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label">价格</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="" name="jg">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">土地性质</label>
-
                 <div class="col-sm-10">
                     <select class="form-control m-bot15" name="tdxz">
                         <option>国有出让</option>

@@ -71,5 +71,6 @@
         <result property="status" column="status" jdbcType="VARCHAR"/>
         <result property="sjdate" column="sjdate" jdbcType="VARCHAR"/>
         <result property="xjdate" column="xjdate" jdbcType="VARCHAR"/>
+        <result property="jg" column="jg" jdbcType="VARCHAR"/>
     </resultMap>
 </mapper>
