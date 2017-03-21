@@ -38,14 +38,18 @@
           #{syqx},#{tdxz},#{cqz},#{zid},#{openid},#{status},#{sjdate},#{xjdate})
     </insert>
 
-    <update id="checkHouseInfo" parameterType="java.util.HashMap" >
+    <update id="checkHouseInfo" parameterType="String" >
         insert into esf_houseinfo (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
-          select (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
+          select hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate
           from esf_houseinfo_gzk a where a.hid=#{hid}
     </update>
 
     <delete id="delUnpostHouseInfo" parameterType="String">
         delete  from esf_houseinfo_gzk where status='0' and zid=#{zid}
+    </delete>
+
+    <delete id="delHouseInfo" parameterType="String">
+        delete  from esf_houseinfo_gzk where  hid=#{hid}
     </delete>
     <resultMap type="com.wlfg.database.esf.HouseInfo" id="houseInfoResult">
         <id property="id" column="id" jdbcType="BIGINT" />

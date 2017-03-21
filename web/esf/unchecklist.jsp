@@ -51,7 +51,22 @@
     function sendok(v){
         editc(v);
     }
-
+    function editc(v){
+        var t = ""+getIdSelections();
+        $.ajax({
+            type: 'post',
+            url: '<%=request.getContextPath()%>/checkedList!esf',
+            dataType: "json",
+            data:{hid:t,ok:v},
+            success: function (data) {
+                var json = eval("(" + data + ")");
+                alert(json.resultCode);
+                if (json.resultCode=="Succeed"){
+                    myinitTable();
+                }
+            }
+        });
+    }
     //隐藏 $('#tableOrderRealItems').bootstrapTable('hideColumn', 'GoodsId');
     function myinitTable() {
         $.get('<%=request.getContextPath()%>/uncheckList!esf', function(data) {
@@ -84,6 +99,7 @@
                             url: '<%=request.getContextPath()%>/checkPic!esf',
                             dataType: "json",
                             data: {hid: row.hid},
+
                             success: function (data) {
                                 var json = eval("(" + data + ")");
                                 var contentstr="";
@@ -112,7 +128,7 @@
 
     function getIdSelections() {
         return $.map($('#ctable').bootstrapTable('getSelections'), function(row) {
-            return row.id
+            return row.hid
         });
     }
     $().ready(function () {myinitTable();

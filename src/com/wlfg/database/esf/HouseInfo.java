@@ -35,7 +35,7 @@ public class HouseInfo {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.insertHouseInfo";
         return Database.Instance().insert(statement,houseinfo)==1;
     }
-    public static Boolean checkHouseInfo(Map map) {
+    public static Boolean checkHouseInfo(String map) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.checkHouseInfo";
         return Database.Instance().insert(statement,map)==1;
     }
@@ -45,6 +45,10 @@ public class HouseInfo {
     }
     public static Boolean delUnpostHouseInfo(String  zid) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.delUnpostHouseInfo";
+        return Database.Instance().delete(statement,zid)>0;
+    }
+    public static Boolean delHouseInfo(String  zid) {
+        String statement = "com.wlfg.database.esf.mapping.houseinfo.delHouseInfo";
         return Database.Instance().delete(statement,zid)>0;
     }
 

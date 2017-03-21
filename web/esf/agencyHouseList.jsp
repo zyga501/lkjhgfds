@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head><meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <title>zjlbiao</title>
+    <title>未审核房源</title>
     <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/css/bootstrap-table.min.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/css/layer.css" rel="stylesheet">
@@ -13,31 +13,36 @@
 </head>
 <body >
 <div>
-        <div id="contactlist"   >
-            <div id="toolbar"><button class="btn btn-primary" title="审核通过" onclick="sendok(1)">审核通过
-            </button><button class="btn btn-danger" title="审核不过" onclick="sendok(2)">审核不过
-            </button></div>
-            <table  id="ctable"  class="table table-striped table-hover table-bordered"> <thead><tr>
-            <th  data-checkbox="true" ><th  data-field="index" data-formatter="indexFormatter">序号</th>
-                <th  data-field="agency" data-sortable="true">中介</th><th  data-field="cqz"  data-sortable="true" >不动产证号</th>
-                <th data-field="jzmj"  data-sortable="true">面积</th><th data-field="jg"  data-sortable="true">价格</th>
-                <th  data-field="xq"  data-sortable="true">小区</th><th data-field="sjdate"  data-sortable="true">日期</th></tr></thead>
+    <div id="contactlist"   >
+        <div id="toolbar"><button class="btn btn-primary" title="审核通过" onclick="sendok(1)">审核通过
+        </button><button class="btn btn-danger" title="审核不过" onclick="sendok(2)">审核不过
+        </button></div>
+        <table  id="ctable"  class="table table-striped table-hover table-bordered"> <thead><tr>
+            <th  data-checkbox="true" ><th  data-field="hid" data-visible="false">hid</th>
+            <th  data-field="index" data-formatter="indexFormatter">序号</th>
+            <th  data-field="cqz"  data-sortable="true" data-formatter="hrefFormatter" >不动产证号</th>
+            <th data-field="jzmj"  data-sortable="true">面积</th><th data-field="jg"  data-sortable="true">价格</th>
+            <th  data-field="xq"  data-sortable="true">小区</th><th data-field="sjdate"  data-sortable="true">日期</th>
+            <th data-field="status"  data-sortable="true">审核状态</th></tr></thead>
         </table>
-        </div>
+    </div>
 
-        <div class="directory-info-row" style="display: none">
-            <div class="row">
-            </div>
+    <div class="directory-info-row" style="display: none">
+        <div class="row">
         </div>
     </div>
+</div>
 </body>
 <script>
+    function hrefFormatter(value, row, index) {
+        return "<a href='#'>"+value+"</a>";
+    }
     function indexFormatter(value, row, index) {
         return index+1;
     }
     function urlFormatter(value, row, index) {
         if (value!=undefined)
-        return "<a href='http://www.baidu.com'>"+value+"</a>";
+            return "<a href='http://www.baidu.com'>"+value+"</a>";
         else return "";
     }
 
@@ -48,7 +53,23 @@
     function sendok(v){
         editc(v);
     }
-
+    function editc(v){
+        var t = ""+getIdSelections();
+        $.ajax({
+            type: 'post',
+            url: '<%=request.getContextPath()%>/uccheckedList!esf',
+            dataType: "json",
+            data:{hid:t,ok:v},
+            success: function (data) {
+                var json = eval("(" + data + ")");
+                alert(json.resultCode);
+                if (json.resultCode=="Succeed"){
+                    myinitTable();
+                }
+            }
+        });
+    }
+    //隐藏 $('#tableOrderRealItems').bootstrapTable('hideColumn', 'GoodsId');
     function myinitTable() {
         $.get('<%=request.getContextPath()%>/uncheckList!esf', function(data) {
             data=JSON.parse(data);
@@ -74,23 +95,25 @@
                 queryParamsType : "queryParams",
                 sidePagination: "client",
                 onClickCell: function(field, value, row, $element){  //加载成功时执行
-                    //alert(field+value+row.id);
-                    if (field=="index"){
+                    if (field=="cqz"){
                         $.ajax({
                             type: 'post',
                             url: '<%=request.getContextPath()%>/checkPic!esf',
                             dataType: "json",
-                            data: {gid: row.id},
+                            data: {hid: row.hid},
+
                             success: function (data) {
                                 var json = eval("(" + data + ")");
+                                var contentstr="";
+                                for(var p in json){
+                                    contentstr +="<img style='width:100%' src='data:image/png;base64," + json[p] + "'><br> ";
+                                }
                                 layer.open({
                                     type: 1,
-                                    title:"审核资料",
+                                    title:"审核资料-"+row.cqz,
                                     skin: 'layui-layer-rim', //加上边框
                                     area: ['80%', '90%'], //宽高
-                                    content: "<img style='width:100%' src='data:image/png;base64," + json.pic1 + "'><br>" +
-                                    "<img style='width:100%' src='data:image/png;base64," + json.pic2 + "'><br>"+
-                                    "<img style='width:100%' src='data:image/png;base64," + json.pic3 + "'><br>"
+                                    content: contentstr
                                 });
                             }
                         });
@@ -107,7 +130,7 @@
 
     function getIdSelections() {
         return $.map($('#ctable').bootstrapTable('getSelections'), function(row) {
-            return row.id
+            return row.hid
         });
     }
     $().ready(function () {myinitTable();

@@ -6,6 +6,7 @@ import com.wlfg.database.esf.HouseInfo;
 import com.wlfg.utils.StringsTools;
 import com.wlfg.weixin.api.QYAccessToken;
 import com.wlfg.weixin.api.QYUserIdInfo;
+import com.wlfg.weixin.utils.QYMessageControl;
 import sun.misc.BASE64Encoder;
 import utils.ProjectSettings;
 
@@ -167,7 +168,7 @@ public class EsfAction extends AjaxActionSupport {
             return AjaxActionComplete();
         }
         else
-        return AjaxActionComplete(HouseInfo.checkHouseInfo(new HashMap(){{put("hid",getParameter("hid").toString());}}));
+        return AjaxActionComplete(HouseInfo.checkHouseInfo(getParameter("hid").toString()));
     }
 
     public String checkPic() throws IOException {
@@ -190,6 +191,63 @@ public class EsfAction extends AjaxActionSupport {
             }
         }
         return AjaxActionComplete(m);
+    }
+
+    public String checkedList(){
+        Map  ammap = AgencyInfo.fetchAM( getRequest().getSession().getAttribute("openid").toString());
+        if (null==ammap){
+            return AjaxActionComplete(false);
+        }
+        String[] hidarr = getParameter("hid").toString().split(",");
+        for (String hid :hidarr) {
+            if ("1".compareTo(getParameter("ok").toString())==0) {
+                if (HouseInfo.checkHouseInfo(hid)){
+                    HouseInfo.delHouseInfo(hid);
+                }
+                for (int i=0;i<20;i++) {
+                    File f = new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + hid +
+                             String.valueOf(i) + ".jpg");
+                    if (f.exists()){
+                        f.renameTo(new File(ProjectSettings.getMapData("esf").get("Picpath").toString() + hid +
+                                 String.valueOf(i) + ".jpg"));
+                    }
+                }
+                for (int i=0;i<10;i++) {
+                    File f = new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + hid +
+                            "_fcz_" + String.valueOf(i) + ".jpg");
+                    if (f.exists()){
+                        f.renameTo(new File(ProjectSettings.getMapData("esf").get("Picpath").toString() + hid +
+                                "_fcz_" + String.valueOf(i) + ".jpg"));
+                    }
+                }
+            }
+            else{
+                HouseInfo houseInfo = HouseInfo.getUncheckHouseInfo(new HashMap() {{ put("hid", hid);}}).get(0);
+                if  (HouseInfo.delHouseInfo(hid))
+                    for (int i=0;i<20;i++) {
+                        File f = new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + hid +
+                                String.valueOf(i) + ".jpg");
+                        if (f.exists()){
+                           f.delete();
+                        }
+                    }
+                for (int i=0;i<10;i++) {
+                    File f = new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + hid +
+                            "_fcz_" + String.valueOf(i) + ".jpg");
+                    if (f.exists()){
+                        f.delete();
+                    }
+                }
+                    try {
+                        QYMessageControl.sendMsg(houseInfo.getOpenid(),"由于未通过审核，房源被删除："+houseInfo.getXq()+
+                                "-"+houseInfo.getSyqx(),ProjectSettings.getMapData("esf").get("agency_agentid").toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+        }
+        return AjaxActionComplete(true);
     }
 }
 
