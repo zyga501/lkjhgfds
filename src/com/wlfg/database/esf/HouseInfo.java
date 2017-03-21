@@ -22,13 +22,22 @@ public class HouseInfo {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.getOfflineHouseInfo";
         return Database.Instance().selectList(statement,map);
     }
+    public static List<Map> getUncheckList(Map map) {
+        String statement = "com.wlfg.database.esf.mapping.houseinfo.getUncheckList";
+        return Database.Instance().selectList(statement,map);
+    }
+    public static Boolean PostHouseInfo(Map map) {
+        String statement = "com.wlfg.database.esf.mapping.houseinfo.PostHouseInfo";
+        return Database.Instance().insert(statement,map)==1;
+    }
+
     public static Boolean insertHouseInfo(HouseInfo houseinfo) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.insertHouseInfo";
         return Database.Instance().insert(statement,houseinfo)==1;
     }
-    public static Boolean checkHouseInfo(HouseInfo houseinfo) {
+    public static Boolean checkHouseInfo(Map map) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.checkHouseInfo";
-        return Database.Instance().insert(statement,houseinfo)==1;
+        return Database.Instance().insert(statement,map)==1;
     }
     public static String getSeq(String  tabname) {
         String statement = "com.wlfg.database.esf.mapping.houseinfo.getSeq";

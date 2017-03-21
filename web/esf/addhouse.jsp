@@ -201,13 +201,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">房产/不动产证号</label>
-
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="" name="cqz">
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="control-label col-sm-2">宣传照</label>
 
                 <div class="col-sm-10">
@@ -219,6 +212,13 @@
     <div class="form-horizontal" id="step2" style="display:none">
         <form class="form-horizontal adminex-form" id="form2">
             <input hidden name="hid" id="hid">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">房产/不动产证号</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="" name="cqz">
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">审核用</label><span>  请上传【房产证】或【不动产证】可多张！</span>
                 <div class="col-sm-10">
@@ -313,9 +313,12 @@
     }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
         var form = data.form, files = data.files, extra = data.extra,
                 response = data.response, reader = data.reader;
-        alert('File batch upload success2222222');
-        alert(JSON.stringify(data));
-        history.go(0);
+        if (json.resultCode == "Succeed") {
+            alert('提交成功！');
+            history.go(0);
+        }else{
+            alert('请选择图片，不要其他文件！');
+        }
     }); ;
 </script>
 </html>

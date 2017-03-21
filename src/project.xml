@@ -1,10 +1,13 @@
 <project>
     <id>1629719047391232</id>
     <idWorkerSeed>1</idWorkerSeed>
-    <Picpath>D:\\QiLian\\</Picpath>
     <hostip>192.168.1.102</hostip>
     <weixinServerInfo>
         <qyappid>wxd8913b7903abf17f</qyappid>
         <qyappSecret>bHEzpe1tjFMj6YLurU6WpTPgbV9dN7-6jmTfLmL4LC5fqObk80CbpgtkI8C9sZpe</qyappSecret>
     </weixinServerInfo>
+    <esf>
+        <uncheckPath>D:\\unpic\\</uncheckPath>
+        <Picpath>D:\\QiLian\\</Picpath>
+    </esf>
 </project>

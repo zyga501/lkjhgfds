@@ -22,6 +22,15 @@
         select  seq from sqlite_sequence where  name=#{tabname};
     </select>
 
+    <select id="getUncheckList"   parameterType="java.util.HashMap"   resultType="java.util.HashMap">
+        SELECT a.*,b.agency FROM esf_houseinfo_gzk a LEFT join esf_agencytab b on a.zid=b.zid where status=1  <if test="null!=zid"> and a.zid=#{zid}</if> <if test="null!=hid">
+        and hid=#{hid}</if> <if test="null!=openid"> and openid=#{openid}</if>
+    </select>
+
+    <update id="PostHouseInfo" parameterType="java.util.HashMap">
+        update esf_houseinfo_gzk  set status=1 ,cqz=#{cqz} where status=0 and  <if test="null!=zid"> and zid=#{zid}</if>
+         <if test="null!=hid">and hid=#{hid}</if>
+    </update>
     <insert id="insertHouseInfo" parameterType="com.wlfg.database.esf.HouseInfo" >
         insert into  esf_houseinfo_gzk
           (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
@@ -29,7 +38,7 @@
           #{syqx},#{tdxz},#{cqz},#{zid},#{openid},#{status},#{sjdate},#{xjdate})
     </insert>
 
-    <update id="checkHouseInfo" parameterType="com.wlfg.database.MenuTree" >
+    <update id="checkHouseInfo" parameterType="java.util.HashMap" >
         insert into esf_houseinfo (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
           select (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
           from esf_houseinfo_gzk a where a.hid=#{hid}

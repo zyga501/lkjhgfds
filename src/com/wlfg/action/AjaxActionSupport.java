@@ -69,6 +69,15 @@ public class AjaxActionSupport extends ActionSupport {
 
         return null;
     }
+    public Object[] getParameterArr(String paramterName) {
+        if (parameterMap_ == null || parameterMap_.size() == 0) {
+            return null;
+        }
+        if (parameterMap_.containsKey(paramterName)) {
+            return ((Object[]) parameterMap_.get(paramterName));
+        }
+        return null;
+    }
 
     public void setParameter(Map<String, Object> parameters) {
         ActionContext.getContext().setParameters(parameters);

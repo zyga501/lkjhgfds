@@ -117,12 +117,12 @@ public class QyAction extends AjaxActionSupport {
         Date dt =new Date();
         while  ((new Date()).getTime()-dt.getTime()<50000){
             if ((null!=getApplication().get(uuid)) && ((boolean)getApplication().get(uuid))) {
-                Map map = (Map) getApplication().get(getParameter("uuid") + "userinfo");
-                getRequest().getSession().setAttribute("userinfo",map);
+                Map attr = (Map) getApplication().get(getParameter("uuid") + "userinfo");
+                getRequest().getSession().setAttribute("userinfo",attr);
                 getApplication().remove(uuid);
                 getApplication().remove(uuid + "userinfo");
-                map.clear();
-                map.put("href","<%=request.getContextPath()%>/esf/addhouse.jsp");
+                Map map = new HashMap<>();
+                map.put("href","../esf/addhouse.jsp");
                 return AjaxActionComplete(true, map);
             }
             try {
