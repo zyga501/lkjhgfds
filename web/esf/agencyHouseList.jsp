@@ -14,9 +14,6 @@
 <body >
 <div>
     <div id="contactlist"   >
-        <div id="toolbar"><button class="btn btn-primary" title="审核通过" onclick="sendok(1)">审核通过
-        </button><button class="btn btn-danger" title="审核不过" onclick="sendok(2)">审核不过
-        </button></div>
         <table  id="ctable"  class="table table-striped table-hover table-bordered"> <thead><tr>
             <th  data-checkbox="true" ><th  data-field="hid" data-visible="false">hid</th>
             <th  data-field="index" data-formatter="indexFormatter">序号</th>
