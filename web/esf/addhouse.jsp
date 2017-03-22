@@ -221,7 +221,7 @@
                 <label class="col-sm-2 control-label">房产/不动产证号</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="" name="cqz">
+                    <input type="text" class="form-control" placeholder="" name="cqz" id="cqz">
                 </div>
             </div>
             <div class="form-group">
@@ -249,6 +249,7 @@
         maxFileCount: 10,
         showCaption: false,
         uploadAsync: false,
+        showPreview:false,
         enctype: 'multipart/form-data',
         previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
         slugCallback: function (filename) {
@@ -311,14 +312,15 @@
         },
         uploadExtraData: function () {
             var datas = $("#hid").val();
-            return {"hid":datas};
+            var vcqz =   $("#cqz").val();
+            return {"hid":datas,"cqz":vcqz};
         }
     }).on("filebatchselected", function(event, files) {
 
     }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
         var form = data.form, files = data.files, extra = data.extra,
                 response = data.response, reader = data.reader;
-        if (json.resultCode == "Succeed") {
+        if ($.parseJSON(response).resultCode=="Succeed") {
             alert('提交成功！');
             history.go(0);
         }else{

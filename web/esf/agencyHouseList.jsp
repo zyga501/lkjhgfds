@@ -20,7 +20,7 @@
             <th  data-field="cqz"  data-sortable="true" data-formatter="hrefFormatter" >不动产证号</th>
             <th data-field="jzmj"  data-sortable="true">面积</th><th data-field="jg"  data-sortable="true">价格</th>
             <th  data-field="xq"  data-sortable="true">小区</th><th data-field="sjdate"  data-sortable="true">日期</th>
-            <th data-field="status"  data-sortable="true">审核状态</th></tr></thead>
+            <th data-field="xcz"  data-sortable="false"data-formatter="urlFormatter">宣传照</th></tr></thead>
         </table>
     </div>
 
@@ -38,9 +38,7 @@
         return index+1;
     }
     function urlFormatter(value, row, index) {
-        if (value!=undefined)
-            return "<a href='http://www.baidu.com'>"+value+"</a>";
-        else return "";
+        return "<a href='#'>查看</a>";
     }
 
     function format_ok(value, row, index) {
@@ -54,7 +52,7 @@
         var t = ""+getIdSelections();
         $.ajax({
             type: 'post',
-            url: '<%=request.getContextPath()%>/uccheckedList!esf',
+            url: '<%=request.getContextPath()%>/uncheckHouseinfo!esf',
             dataType: "json",
             data:{hid:t,ok:v},
             success: function (data) {
@@ -68,7 +66,7 @@
     }
     //隐藏 $('#tableOrderRealItems').bootstrapTable('hideColumn', 'GoodsId');
     function myinitTable() {
-        $.get('<%=request.getContextPath()%>/uncheckList!esf', function(data) {
+        $.get('<%=request.getContextPath()%>/uncheckHouseinfo!esf', function(data) {
             data=JSON.parse(data);
             //先销毁表格
             $('#ctable').bootstrapTable('destroy');
@@ -96,9 +94,7 @@
                         $.ajax({
                             type: 'post',
                             url: '<%=request.getContextPath()%>/checkPic!esf',
-                            dataType: "json",
                             data: {hid: row.hid},
-
                             success: function (data) {
                                 var json = eval("(" + data + ")");
                                 var contentstr="";
@@ -108,6 +104,28 @@
                                 layer.open({
                                     type: 1,
                                     title:"审核资料-"+row.cqz,
+                                    skin: 'layui-layer-rim', //加上边框
+                                    area: ['80%', '90%'], //宽高
+                                    content: contentstr
+                                });
+                            }
+                        });
+                        return;
+                    }
+                   else if (field=="xcz"){
+                        $.ajax({
+                            type: 'post',
+                            url: '<%=request.getContextPath()%>/xczPic!esf',
+                            data:{hid:row.hid},
+                            success: function (data) {
+                                var json = eval("(" + data + ")");
+                                var contentstr="";
+                                for(var p in json){
+                                    contentstr +="<img style='width:100%' src='data:image/png;base64," + json[p] + "'><br> ";
+                                }
+                                layer.open({
+                                    type: 1,
+                                    title:"宣传资料-"+row.cqz,
                                     skin: 'layui-layer-rim', //加上边框
                                     area: ['80%', '90%'], //宽高
                                     content: contentstr

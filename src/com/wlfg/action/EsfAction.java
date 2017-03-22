@@ -8,11 +8,12 @@ import com.wlfg.weixin.api.QYAccessToken;
 import com.wlfg.weixin.api.QYUserIdInfo;
 import com.wlfg.weixin.utils.QYMessageControl;
 import sun.misc.BASE64Encoder;
+import utils.ImageZipUtil;
 import utils.ProjectSettings;
+import utils.WaterMarkUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
@@ -48,22 +49,20 @@ public class EsfAction extends AjaxActionSupport {
     }
 
     public String addHousePage(){
-
         if (null==getRequest().getSession().getAttribute("openid")) {
             setParameter("redirect_url", "esf/addHousePage!esf");
             return "fetchWxCode";
         }
-        else {
-            try {
-                QYUserIdInfo qyUserIdInfo = new QYUserIdInfo(QYAccessToken.getQYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString()),
-                        getRequest().getSession().getAttribute("openid").toString());
-                getRequest().getSession().setAttribute("userinfo",qyUserIdInfo.getMsgMap());
-            } catch (Exception e) {
-            }
-            AgencyInfo agencyInfo = AgencyInfo.fetchAgency(getRequest().getSession().getAttribute("openid").toString());
-            if (null!=agencyInfo){
-                return "addHousePage";
-            }
+        try {
+            QYUserIdInfo qyUserIdInfo = new QYUserIdInfo(QYAccessToken.getQYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString()),
+                    getRequest().getSession().getAttribute("openid").toString());
+            if (qyUserIdInfo.getRequest())
+            getRequest().getSession().setAttribute("userinfo",qyUserIdInfo.getMsgMap());
+        } catch (Exception e) {
+        }
+        AgencyInfo agencyInfo = AgencyInfo.fetchAgency(getRequest().getSession().getAttribute("openid").toString());
+        if (null!=agencyInfo){
+            return "addHousePage";
         }
         return "page404";
     }
@@ -105,7 +104,7 @@ public class EsfAction extends AjaxActionSupport {
         if (lh.size()>0){
             HouseInfo.delUnpostHouseInfo(String.valueOf(agencyInfo.getZid()));
         }
-        houseInfo.setHid(HouseInfo.getSeq("esf_houseinfo_gzk")+"_"+houseInfo.getZid());
+        houseInfo.setHid(HouseInfo.getSeq("esf_houseinfo_gzk")+"_"+String.valueOf(agencyInfo.getZid()));
         houseInfo.setStatus("0");
         houseInfo.setOpenid(((Map) getRequest().getSession().getAttribute("userinfo")).get("userid").toString());
         houseInfo.setSjdate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
@@ -117,8 +116,18 @@ public class EsfAction extends AjaxActionSupport {
             return AjaxActionComplete(false,param);
         }
         for (int i=0;i<f.length;i++) {
-            f[i].renameTo(new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() +houseInfo.getHid()+
-                    "_"+String.valueOf(i)+".jpg"));
+            if (f[i].length()/1024>500) {
+                ImageZipUtil.zipImageFile(f[i], new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + houseInfo.getHid() +
+                        "_" + String.valueOf(i) + ".jpg"), 888, 888, 0.7f);
+                WaterMarkUtils.markPic(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + houseInfo.getHid() +
+                            "_" + String.valueOf(i) + ".jpg",
+                        ProjectSettings.getMapData("esf").get("uncheckPath").toString() + houseInfo.getHid() +
+                            "_" + String.valueOf(i) + ".jpg",agencyInfo.getAgency());
+            }
+            else {
+                WaterMarkUtils.markPic(f[i].getAbsolutePath(),ProjectSettings.getMapData("esf").get("uncheckPath").toString() + houseInfo.getHid() +
+                        "_" + String.valueOf(i) + ".jpg",agencyInfo.getAgency());
+            }
         }
         param.clear();
         param.put("hid",houseInfo.getHid());
@@ -128,7 +137,7 @@ public class EsfAction extends AjaxActionSupport {
     public String  addHouseSH(){
         try {
             String hid = getParameter("hid").toString();
-            List<HouseInfo> lhouseInfo = HouseInfo.getUncheckHouseInfo(new HashMap() {{
+            List<HouseInfo> lhouseInfo = HouseInfo.getUnpostHouseInfo(new HashMap() {{
                 put("hid", hid);
                 put("openid",
                         ((Map) getRequest().getSession().getAttribute("userinfo")).get("userid"));
@@ -139,10 +148,21 @@ public class EsfAction extends AjaxActionSupport {
                     put("openid",((Map) getRequest().getSession().getAttribute("userinfo")).get("userid"));
                     put("cqz", getParameter("cqz"));
                 }});
+                AgencyInfo agencyInfo = AgencyInfo.fetchAgency(((Map) getRequest().getSession().getAttribute("userinfo")).get("userid").toString());
                 File[] f = (File[]) getParameterArr("fcz");
                 for (int i = 0; i < f.length; i++) {
-                    f[i].renameTo(new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + lhouseInfo.get(0).getHid() +
-                            "_fcz_" + String.valueOf(i) + ".jpg"));
+                    if (f[i].length()/1024>500) {
+                        ImageZipUtil.zipImageFile(f[i], new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + lhouseInfo.get(0).getHid() +
+                                "_fcz_" + String.valueOf(i) + ".jpg"), 888, 888, 0.7f);
+                        WaterMarkUtils.markPic(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + lhouseInfo.get(0).getHid() +
+                                        "_fcz_" + String.valueOf(i) + ".jpg",
+                                ProjectSettings.getMapData("esf").get("uncheckPath").toString() + lhouseInfo.get(0).getHid() +
+                                        "_fcz_" + String.valueOf(i) + ".jpg",agencyInfo.getAgency());
+                    }
+                    else {
+                        WaterMarkUtils.markPic(f[i].getAbsolutePath(),ProjectSettings.getMapData("esf").get("uncheckPath").toString() + lhouseInfo.get(0).getHid() +
+                                "_fcz_" + String.valueOf(i) + ".jpg",agencyInfo.getAgency());
+                    }
                 }
             }
             return AjaxActionComplete(true);
@@ -172,11 +192,16 @@ public class EsfAction extends AjaxActionSupport {
     }
 
     public String checkPic() throws IOException {
-        Map  ammap = AgencyInfo.fetchAM( getRequest().getSession().getAttribute("openid").toString());
-        if (null==ammap){
-            return AjaxActionComplete();
-        }
         String hid = getParameter("hid").toString();
+        List<HouseInfo> lhouseInfo =  HouseInfo.getUncheckHouseInfo(new HashMap() {{
+            put("hid",hid);}});
+        if (null==lhouseInfo || lhouseInfo.get(0).getOpenid().compareTo(((Map) getRequest().getSession().getAttribute("userinfo")).get("userid").toString())!=0) {
+            Map ammap = AgencyInfo.fetchAM(getRequest().getSession().getAttribute("openid").toString());
+            if (null == ammap) {
+                return AjaxActionComplete();
+            }
+        }
+//        String hid = getParameter("hid").toString();
         List m= new ArrayList<>();
         for (int i=0;i<10;i++){
            File  f =  new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + hid +
@@ -193,6 +218,28 @@ public class EsfAction extends AjaxActionSupport {
         return AjaxActionComplete(m);
     }
 
+    public String xczPic() throws IOException {
+        String hid = getParameter("hid").toString();
+        List<HouseInfo> lhouseInfo =  HouseInfo.getUncheckHouseInfo(new HashMap() {{
+            put("hid",hid);}});
+        if (null==lhouseInfo || lhouseInfo.get(0).getOpenid().compareTo(((Map) getRequest().getSession().getAttribute("userinfo")).get("userid").toString())!=0){
+            return AjaxActionComplete();
+        }
+        List m= new ArrayList<>();
+        for (int i=0;i<10;i++){
+            File  f =  new File(ProjectSettings.getMapData("esf").get("uncheckPath").toString() + hid +"_"+
+                    String.valueOf(i) + ".jpg");
+            if (f.exists()){
+                FileInputStream inputFile = null;
+                inputFile = new FileInputStream(f);
+                byte[] buffer = new byte[(int) f.length()];
+                inputFile.read(buffer);
+                inputFile.close();
+                m.add(new BASE64Encoder().encode(buffer));
+            }
+        }
+        return AjaxActionComplete(m);
+    }
     public String checkedList(){
         Map  ammap = AgencyInfo.fetchAM( getRequest().getSession().getAttribute("openid").toString());
         if (null==ammap){
@@ -248,6 +295,16 @@ public class EsfAction extends AjaxActionSupport {
                 }
         }
         return AjaxActionComplete(true);
+    }
+
+    public  String uncheckHouseinfo(){
+        AgencyInfo agencyInfo = AgencyInfo.fetchAgency(((Map) getRequest().getSession().getAttribute("userinfo")).get("userid").toString());
+        if (null==agencyInfo){
+            return AjaxActionComplete();
+        }
+        else
+            return AjaxActionComplete(HouseInfo.getUncheckHouseInfo(new HashMap() {{
+                put("openid",agencyInfo.getUserid());}}));
     }
 }
 

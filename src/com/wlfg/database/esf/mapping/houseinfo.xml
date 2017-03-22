@@ -28,7 +28,7 @@
     </select>
 
     <update id="PostHouseInfo" parameterType="java.util.HashMap">
-        update esf_houseinfo_gzk  set status=1 ,cqz=#{cqz} where status=0 and  <if test="null!=zid"> and zid=#{zid}</if>
+        update esf_houseinfo_gzk  set status=1 ,cqz=#{cqz} where status=0  <if test="null!=zid"> and zid=#{zid}</if>
          <if test="null!=hid">and hid=#{hid}</if>
     </update>
     <insert id="insertHouseInfo" parameterType="com.wlfg.database.esf.HouseInfo" >
