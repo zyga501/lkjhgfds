@@ -20,7 +20,7 @@
                 "nonceStr": json.nonceStr,
                 "signature": json.signature,
                 jsApiList: [
-                    getLocation
+                    'getLocation'
                 ]
             });
             wx.ready(function () {
