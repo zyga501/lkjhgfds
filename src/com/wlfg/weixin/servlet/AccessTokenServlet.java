@@ -1,9 +1,7 @@
 package com.wlfg.weixin.servlet;
 
 
-import com.wlfg.weixin.api.AccessToken;
 import com.wlfg.weixin.api.QYAccessToken;
-import com.wlfg.weixin.utils.JsapiTicketUtil;
 import utils.ProjectSettings;
 
 import javax.servlet.ServletException;
@@ -16,12 +14,6 @@ public class AccessTokenServlet extends HttpServlet {
         public void run() {
             while (true) {
                 try {
-                    if (ProjectSettings.getMapData("weixinServerInfo").get("appid")!=null) {
-                        List<AccessToken> appidList = new ArrayList<>();
-                        appidList.add(new AccessToken(ProjectSettings.getMapData("weixinServerInfo").get("appid").toString(), ProjectSettings.getMapData("weixinServerInfo").get("appSecret").toString()));
-                        AccessToken.updateAccessToken(appidList);
-                        JsapiTicketUtil.updateJsApiTicket(ProjectSettings.getMapData("weixinServerInfo").get("appid").toString());
-                    }
                     if (ProjectSettings.getMapData("weixinServerInfo").get("qyappid")!=null) {
                         List<QYAccessToken> qyappidList = new ArrayList<>();
                         qyappidList.add(new QYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString(), ProjectSettings.getMapData("weixinServerInfo").get("qyappSecret").toString()));
