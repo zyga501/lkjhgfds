@@ -1,9 +1,9 @@
 package com.wlfg.action;
 
+import com.wlfg.weixin.api.JsapiTicket;
 import com.wlfg.weixin.api.QYAccessToken;
 import com.wlfg.weixin.api.QYUserId;
 import com.wlfg.weixin.api.QYUserIdInfo;
-import com.wlfg.weixin.utils.JsapiTicketUtil;
 import com.wlfg.weixin.utils.configSignature;
 import org.xml.sax.SAXException;
 import utils.ProjectSettings;
@@ -100,15 +100,16 @@ public class QyAction extends AjaxActionSupport {
         return AjaxActionComplete(ProjectSettings.setData("userinfo/"+getRequest().getSession().getAttribute("openid"),new String (getParameter("uname").toString().getBytes("iso-8859-1"),"utf-8")));
     }
 
-    public String mygps() throws Exception {
-        String  appidstr = ProjectSettings.getMapData("weixinServerInfo").get("appid").toString();
-        setAttribute("appid", appidstr);
+    public String getSignPackage() throws Exception {
+        Map<String,Object> resultMap = new HashMap<>();
+        String  appidstr = ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString();
+        resultMap.put("appId", appidstr);
         String nonceiStr = Long.toString(System.currentTimeMillis() / 1000);
-        setAttribute("timestamp",nonceiStr);
-        setAttribute("nonceStr", nonceiStr);
-        String sginstr = configSignature.sign(JsapiTicketUtil.getJsApiTicket(appidstr),nonceiStr,nonceiStr, getRequest().getRequestURL().toString());
-        setAttribute("signature", sginstr);
-        return  "mygps";
+        resultMap.put("timeStamp", nonceiStr);
+        resultMap.put("nonceStr", nonceiStr);
+        String sginstr = configSignature.sign(JsapiTicket.getJsApiTicket(appidstr),nonceiStr,nonceiStr, getRequest().getRequestURL().toString());
+        resultMap.put("signature", sginstr);
+        return AjaxActionComplete(resultMap);
     }
 
     /*循环验证*/
