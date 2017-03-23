@@ -107,7 +107,8 @@ public class QyAction extends AjaxActionSupport {
         String nonceiStr = Long.toString(System.currentTimeMillis() / 1000);
         resultMap.put("timeStamp", nonceiStr);
         resultMap.put("nonceStr", nonceiStr);
-        String sginstr = configSignature.sign(JsapiTicket.getJsApiTicket(appidstr),nonceiStr,nonceiStr, getRequest().getRequestURL().toString());
+        String sginstr = configSignature.sign(JsapiTicket.getJsApiTicket(appidstr),nonceiStr,nonceiStr,
+                getRequest().getScheme() + "://" + getRequest().getServerName()+getRequest().getContextPath()+"/getLocation.jsp");
         resultMap.put("signature", sginstr);
         return AjaxActionComplete(resultMap);
     }

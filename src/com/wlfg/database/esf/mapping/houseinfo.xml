@@ -33,14 +33,14 @@
     </update>
     <insert id="insertHouseInfo" parameterType="com.wlfg.database.esf.HouseInfo" >
         insert into  esf_houseinfo_gzk
-          (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
+          (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate,title)
           values (#{hid},#{ssq},#{xq},#{fwjg},#{hx_s},#{hx_t},#{hx_w},#{jzmj},#{zcs},#{szc},#{cx},#{jcnf},#{lx},#{yt},
-          #{syqx},#{tdxz},#{cqz},#{zid},#{openid},#{status},#{sjdate},#{xjdate})
+          #{syqx},#{tdxz},#{cqz},#{zid},#{openid},#{status},#{sjdate},#{xjdate},#{title})
     </insert>
 
     <update id="checkHouseInfo" parameterType="String" >
-        insert into esf_houseinfo (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate)
-          select hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate
+        insert into esf_houseinfo (hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,status,sjdate,xjdate,title)
+          select hid,ssq,xq,fwjg,hx_s,hx_t,hx_w,jzmj,zcs,szc,cx,jcnf,lx,yt,syqx,tdxz,cqz,zid,openid,0,sjdate,xjdate,title
           from esf_houseinfo_gzk a where a.hid=#{hid}
     </update>
 
@@ -75,6 +75,7 @@
         <result property="status" column="status" jdbcType="VARCHAR"/>
         <result property="sjdate" column="sjdate" jdbcType="VARCHAR"/>
         <result property="xjdate" column="xjdate" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
         <result property="jg" column="jg" jdbcType="VARCHAR"/>
     </resultMap>
 </mapper>

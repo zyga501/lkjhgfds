@@ -19,6 +19,13 @@
     <div class="form-horizontal" id="step1">
         <form class="form-horizontal adminex-form" id="form1">
             <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label">宣传标语</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="title" placeholder="介绍房产概况">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">区域</label>
 
                 <div class="col-sm-10">

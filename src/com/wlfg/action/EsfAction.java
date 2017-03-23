@@ -306,5 +306,11 @@ public class EsfAction extends AjaxActionSupport {
             return AjaxActionComplete(HouseInfo.getUncheckHouseInfo(new HashMap() {{
                 put("openid",agencyInfo.getUserid());}}));
     }
+
+    public String houseList(){
+        List<HouseInfo> lh= HouseInfo.getOnlineHouseInfo(null);
+        getRequest().setAttribute("houseList",lh);
+        return "houselist";
+    }
 }
 

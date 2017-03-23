@@ -244,6 +244,14 @@ public class HouseInfo {
         this.jg = jg;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     private long id;
     private String hid;
     private String ssq;
@@ -268,6 +276,7 @@ public class HouseInfo {
     private String xjdate;
     private String zid;
     private String jg;
+    private String title;
 
 
 }
