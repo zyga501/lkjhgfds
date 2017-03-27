@@ -15,6 +15,7 @@ import utils.WaterMarkUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -222,7 +223,11 @@ public class EsfAction extends AjaxActionSupport {
         String hid = getParameter("hid").toString();
         List<HouseInfo> lhouseInfo =  HouseInfo.getUncheckHouseInfo(new HashMap() {{
             put("hid",hid);}});
-        if (null==lhouseInfo || lhouseInfo.get(0).getOpenid().compareTo(((Map) getRequest().getSession().getAttribute("userinfo")).get("userid").toString())!=0){
+        if (null==lhouseInfo|| lhouseInfo.size()==0){
+            lhouseInfo =  HouseInfo.getOnlineHouseInfo(new HashMap() {{
+                put("hid",hid);}});
+        }
+        if (null==lhouseInfo|| lhouseInfo.size()==0){
             return AjaxActionComplete();
         }
         List m= new ArrayList<>();
@@ -236,6 +241,18 @@ public class EsfAction extends AjaxActionSupport {
                 inputFile.read(buffer);
                 inputFile.close();
                 m.add(new BASE64Encoder().encode(buffer));
+            }
+            else {
+                f =  new File(ProjectSettings.getMapData("esf").get("Picpath").toString() + hid +"_"+
+                        String.valueOf(i) + ".jpg");
+                if (f.exists()) {
+                    FileInputStream inputFile = null;
+                    inputFile = new FileInputStream(f);
+                    byte[] buffer = new byte[(int) f.length()];
+                    inputFile.read(buffer);
+                    inputFile.close();
+                    m.add(new BASE64Encoder().encode(buffer));
+                }
             }
         }
         return AjaxActionComplete(m);
@@ -308,9 +325,54 @@ public class EsfAction extends AjaxActionSupport {
     }
 
     public String houseList(){
-        List<HouseInfo> lh= HouseInfo.getOnlineHouseInfo(null);
-        getRequest().setAttribute("houseList",lh);
-        return "houselist";
+        try {
+            List<HouseInfo> lh = null;
+            if (null != getParameter("zj")) {
+                AgencyInfo agency = null;
+                String zj = null;
+                zj = new String(getParameter("zj").toString().getBytes("ISO8859-1"), "utf-8");
+                agency = AgencyInfo.fetchAgencyByName(zj);
+                if (null != agency) {
+                    String zid= String.valueOf(agency.getZid());
+                    lh = HouseInfo.getOnlineHouseInfo(new HashMap() {{
+                        put("zid", zid);
+                    }});
+                }
+                getRequest().setAttribute("zj", zj);
+            } else
+                lh = HouseInfo.getOnlineHouseInfo(null);
+            getRequest().setAttribute("houseList", lh);
+            return "houselist";
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+            return "page404";
+    }
+    public void xczFirstPic() throws IOException {
+        String hid = getParameter("hid").toString();
+            File  f =  new File(ProjectSettings.getMapData("esf").get("Picpath").toString() + hid +"_0.jpg");
+            if (f.exists()) {
+                FileInputStream inputFile = null;
+                inputFile = new FileInputStream(f);
+                byte[] buffer = new byte[(int) f.length()];
+                inputFile.read(buffer);
+                inputFile.close();
+                getResponse().setContentType("image/*");
+                getResponse().getOutputStream().write(buffer);
+                getResponse().getOutputStream().close();
+                getResponse().getOutputStream().flush();
+            }
+    }
+    public String houseinfo(){
+        try {
+            List<HouseInfo> lhinfo = HouseInfo.getOnlineHouseInfo(new HashMap() {{
+                put("hid",getParameter("hid"));}});
+            getRequest().setAttribute("hinfo", lhinfo.get(0));
+            return  "houseinfopage";
+        }
+        catch (Exception e){
+            return "page404";
+        }
     }
 }
 

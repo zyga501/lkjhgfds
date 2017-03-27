@@ -42,10 +42,13 @@
             <result name="agencyHouseList" >agencyHouseList.jsp</result>
             <result name="mainpage" >./mainpage.jsp</result>
             <result name="houselist">houseList.jsp</result>
+            <result name="houseinfopage">houseinfo.jsp</result>
             <result name="fetchWxCode" type="chain" >QYAct!fetchWxCode</result>
         </action>
         <action name="QYAct!*" class="com.wlfg.action.QyAction" method="{1}">
             <result name="fetchWxCode" type="chain" >QYAct!fetchWxCode</result>
+            <result name="daka" type="chain" >Act!daka</result>
+            <result name="getLocation" >getLocation.jsp</result>
         </action>
         <action name="Ser!*" class="com.wlfg.action.CoreServlet" method="{1}">
         </action>

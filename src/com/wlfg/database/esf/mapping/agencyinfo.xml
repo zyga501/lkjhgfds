@@ -4,6 +4,9 @@
     <select id="fetchAgency"   parameterType="String"   resultMap="agencyInfoResult">
         SELECT * FROM esf_agencytab where  userid=#{userid}
     </select>
+    <select id="fetchAgencyByName"   parameterType="String"   resultMap="agencyInfoResult">
+        SELECT * FROM esf_agencytab where  agency=#{agency}
+    </select>
     <select id="fetchAM"   parameterType="String"   resultType="java.util.HashMap">
         SELECT * FROM esf_agencymanager where   userid=#{userid}
     </select>

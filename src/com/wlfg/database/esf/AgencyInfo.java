@@ -10,11 +10,15 @@ public class AgencyInfo {
         String statement = "com.wlfg.database.esf.mapping.agencyinfo.fetchAgency";
         return Database.Instance().selectOne(statement,userid);
     }
+    public static AgencyInfo fetchAgencyByName (String agency){
+        String statement = "com.wlfg.database.esf.mapping.agencyinfo.fetchAgencyByName";
+        return Database.Instance().selectOne(statement,agency);
+    }
+
     public static Map fetchAM (String userid){
         String statement = "com.wlfg.database.esf.mapping.agencyinfo.fetchAM";
         return Database.Instance().selectOne(statement,userid);
     }
-
     private int zid;
     private String agency;
     private String adress;

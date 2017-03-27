@@ -1,5 +1,6 @@
 package com.wlfg.action;
 
+import com.wlfg.database.CheckWork;
 import com.wlfg.weixin.api.JsapiTicket;
 import com.wlfg.weixin.api.QYAccessToken;
 import com.wlfg.weixin.api.QYUserId;
@@ -11,6 +12,7 @@ import utils.ProjectSettings;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,25 +64,41 @@ public class QyAction extends AjaxActionSupport {
     }
 
     public String bingo2() throws IOException {
-        if (null==getRequest().getSession().getAttribute("openid")) {
-            setParameter("redirect_url", "QYAct!bingo2");
-            return "fetchWxCode";
-        }
-        Object uname = null;
         try {
-            ProjectSettings.reloadRes();
-            uname = ProjectSettings.getMapData("userinfo").get(getRequest().getSession().getAttribute("openid").toString());
+            QYUserIdInfo qyUserIdInfo = new QYUserIdInfo(QYAccessToken.getQYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString()),
+                    getRequest().getSession().getAttribute("openid").toString());
+            if (qyUserIdInfo.getRequest()) {
+                setParameter("u",new String(qyUserIdInfo.getMsgMap().get("name").toString().getBytes("utf-8"),"ISO8859-1"));
+                return "daka";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e){
+        return "error!";
+    }
 
+    public String gpsinfo(){
+        return "getLocation";
+    }
+    public String getgps() throws IOException {
+
+        CheckWork ck= new CheckWork();
+        ck.setLx(getParameter("lx").toString());
+        ck.setLy(getParameter("ly").toString());
+        ck.setSigndate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
+        try {
+            QYUserIdInfo qyUserIdInfo = new QYUserIdInfo(QYAccessToken.getQYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString()),
+                    getRequest().getSession().getAttribute("openid").toString());
+            if (qyUserIdInfo.getRequest()) {
+                setParameter("u",new String(qyUserIdInfo.getMsgMap().get("name").toString().getBytes("utf-8"),"ISO8859-1"));
+                ck.setUname(qyUserIdInfo.getMsgMap().get("name").toString());
+                CheckWork.insertLog(ck);
+                return "daka";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (null==uname){
-            setParameter("redirect_url", "QYAct!bingo");
-            //getResponse().sendRedirect("regPage.jsp");
-            return "regPage";
-        }
-        setParameter("u",new String (uname.toString().getBytes("utf-8"),"ISO8859-1"));
-        return "daka";
+        return "error!";
     }
 
     public String reg() throws IOException, TransformerException, SAXException, ParserConfigurationException {

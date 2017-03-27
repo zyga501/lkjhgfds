@@ -3,33 +3,26 @@
 <html>
 <head>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <title>新增房源</title>
+    <title>房源信息</title>
     <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="<%=request.getContextPath()%>/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="<%=request.getContextPath()%>/css/layer.css" rel="stylesheet">
 </head>
 <body>
 <div class="panel-body">
-    <div class="row">
-        <span id="btnstep1" class="center-block btn btn-warning col-sm-6" onclick="pre()">第一步<br>二手房信息</span>
-        <span id="btnstep2" class="center-block btn btn-default col-sm-6"  onclick="ntt()"> 第二步<br>审核信息</span>
-    </div>
-    <input type="hidden" id="gid" name="gid" value="">
-
-    <div class="form-horizontal" id="step1">
+    <div class="form-horizontal">
         <form class="form-horizontal adminex-form" id="form1">
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">宣传标语</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="title" placeholder="介绍房产概况">
+                    <input type="text" class="form-control" name="title" placeholder="介绍房产概况" value="<s:property value="#request.hinfo.title"></s:property>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">区域</label>
-
                 <div class="col-sm-10">
-                    <select class="form-control m-bot15" name="ssq">
+                    <select class="form-control m-bot15" name="ssq" id="ssq">
                         <option>太平街道</option>
                         <option>城东街道</option>
                         <option>城西街道</option>
@@ -53,14 +46,14 @@
                 <label class="col-sm-2 col-sm-2 control-label">小区</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="xq">
+                    <input type="text" class="form-control" name="xq"  value="<s:property value="#request.hinfo.xq"></s:property>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">房屋结构</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="fwjg">
+                    <input type="text" class="form-control" name="fwjg"  value="<s:property value="#request.hinfo.fwjg"></s:property>">
                 </div>
             </div>
             <div class="form-group">
@@ -70,10 +63,10 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="col-sm-10">
-                                    <select class="form-control" name="hx_s">
+                                    <select class="form-control" name="hx_s" id="hx_s">
                                         <option>0</option>
                                         <option>1</option>
-                                        <option selected>2</option>
+                                        <option>2</option>
                                         <option>3</option>
                                     </select>
                                 </div>
@@ -83,9 +76,9 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="col-sm-10">
-                                    <select class="form-control m-bot15" name="hx_t">
+                                    <select class="form-control m-bot15" name="hx_t" id="hx_t">
                                         <option>0</option>
-                                        <option selected>1</option>
+                                        <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
                                     </select>
@@ -96,9 +89,9 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="col-sm-10">
-                                    <select class="form-control m-bot15" name="hx_w">
+                                    <select class="form-control m-bot15" name="hx_w" id="hx_w">
                                         <option>0</option>
-                                        <option selected>1</option>
+                                        <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
                                     </select>
@@ -112,27 +105,27 @@
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">建筑面积</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="jzmj">
+                    <input type="text" class="form-control" name="jzmj"  value="<s:property value="#request.hinfo.jzmj"></s:property>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">总层数</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" data-trigger="click" name="zcs">
+                    <input type="text" class="form-control" data-trigger="click" name="zcs"  value="<s:property value="#request.hinfo.zcs"></s:property>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">所在层</label>
 
                 <div class="col-sm-10">
-                    <input class="form-control" id="focusedInput" type="text" name="szc">
+                    <input class="form-control" id="focusedInput" type="text" name="szc"  value="<s:property value="#request.hinfo.szc"></s:property>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">朝向</label>
                 <div class="col-sm-10">
-                    <select class="form-control"  name="cx">
+                    <select class="form-control"  name="cx" id="cx">
                         <option>南</option>
                         <option>东</option>
                         <option>西</option>
@@ -148,7 +141,7 @@
                 <label class="col-sm-2 col-sm-2 control-label">建成年份</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="" name="jcnf">
+                    <input type="text" class="form-control" placeholder="" name="jcnf"  value="<s:property value="#request.hinfo.jcnf"></s:property>">
                 </div>
             </div>
 
@@ -160,7 +153,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="col-sm-10">
-                                    <select class="form-control" name="lx">
+                                    <select class="form-control" name="lx" id="lx">
                                         <option>商品房</option>
                                         <option>私房</option>
                                         <option>别墅</option>
@@ -172,7 +165,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="col-sm-10">
-                                    <select class="form-control m-bot15" name="syqx">
+                                    <select class="form-control m-bot15" name="syqx" id="syqx">
                                         <option>70</option>
                                         <option>50</option>
                                         <option>30</option>
@@ -184,7 +177,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="col-sm-10">
-                                    <select class="form-control" name="yt">
+                                    <select class="form-control" name="yt" id="yt">
                                         <option>住宅</option>
                                         <option>商业</option>
                                         <option>厂房</option>
@@ -199,13 +192,13 @@
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">价格</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="" name="jg">
+                    <input type="text" class="form-control" placeholder="" name="jg"  value="<s:property value="#request.hinfo.jg"></s:property>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">土地性质</label>
                 <div class="col-sm-10">
-                    <select class="form-control m-bot15" name="tdxz">
+                    <select class="form-control m-bot15" name="tdxz" id="tdxz">
                         <option>国有出让</option>
                         <option>国有划拨</option>
                         <option>其他</option>
@@ -214,27 +207,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2">宣传照</label>
-
-                <div class="col-sm-10">
-                    <input id="xcz" name="xcz" type="file" class="file" multiple class="file-loading">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="form-horizontal" id="step2" style="display:none">
-        <form class="form-horizontal adminex-form" id="form2">
-            <input hidden name="hid" id="hid">
-            <div class="form-group">
-                <label class="col-sm-2 control-label">房产/不动产证号</label>
-
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="" name="cqz" id="cqz">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">审核用</label><span>  请上传【房产证】或【不动产证】可多张！</span>
-                <div class="col-sm-10">
-                    <input id="fcz" name="fcz" type="file" class="file" multiple class="file-loading">
+                <div class="col-sm-10" id="contenti_mg">加载中...
                 </div>
             </div>
         </form>
@@ -243,96 +216,35 @@
 </body>
 <script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/fileinput.min.js" type="text/javascript"></script>
-<script src="<%=request.getContextPath()%>/js/fileinput_locale_zh.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/js/layer.min.js"></script>
 <script>
-    $("#xcz").fileinput({
-        language: 'zh',
-        uploadUrl: '<%=request.getContextPath()%>/addHouse!esf',
-        allowedFileExtensions: ['jpg', 'png', 'gif'],
-        overwriteInitial: false,
-        dropZoneEnabled: false,
-        maxFileCount: 10,
-        showCaption: false,
-        uploadAsync: false,
-        showPreview:false,
-        enctype: 'multipart/form-data',
-        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-        slugCallback: function (filename) {
-            return filename.replace('(', '_').replace(']', '_');
-        },
-        uploadExtraData: function () {
-            var datas = $("#form1").serialize();
-            return {"ExtData":datas};
-        }
-    }).on("filebatchselected", function(event, files) {
+    $().ready(function(){
+            setv("#ssq","<s:property value="#request.hinfo.ssq"></s:property>");
+            setv("#cx","<s:property value="#request.hinfo.cx"></s:property>");
+            setv("#hx_t","<s:property value="#request.hinfo.hx_t"></s:property>");
+            setv("#hx_s","<s:property value="#request.hinfo.hx_s"></s:property>");
+            setv("#hx_w","<s:property value="#request.hinfo.hx_w"></s:property>");
+            setv("#tdqx","<s:property value="#request.hinfo.tdqx"></s:property>");
+            setv("#tdxz","<s:property value="#request.hinfo.tdxz"></s:property>");
+            setv("#yt","<s:property value="#request.hinfo.yt"></s:property>");
+            setv("#lx","<s:property value="#request.hinfo.lx"></s:property>");
+        $.ajax({
+            type: 'post',
+            url: '<%=request.getContextPath()%>/xczPic!esf',
+            data:{hid:"<s:property value="#request.hinfo.hid"></s:property>"},
+            success: function (data) {
+                var json = eval("(" + data + ")");
+                var contentstr = "";
+                for (var p in json) {
+                    contentstr += "<img style='width:100%' src='data:image/png;base64," + json[p] + "'><br> ";
+                }
+                $("#contenti_mg").html(contentstr);
+            }
+        });
+    })
 
-    }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-                response = data.response, reader = data.reader;
-        if ($.parseJSON(response).resultCode=="Succeed") {
-            $("#hid").val($.parseJSON(response).hid);
-            $("#btnstep2").attr("disabled", false);
-            $("#step1").css("display", "none");
-            $("#step2").css("display", "block");
-            $("#btnstep1").attr("class", "center-block btn btn-default col-sm-6");
-            $("#btnstep2").attr("class", "center-block btn btn-warning col-sm-6");
-        }
-        else{
-            alert($.parseJSON(response).msg);
-        }
-    }).on('filepreupload', function(event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-                response = data.response, reader = data.reader;
-        alert(JSON.stringify(event));
-    });;
-
-    function ntt() {
-        if ($("#btnstep2").attr("disabled") != "disabled") {
-            $("#step1").css("display", "none");
-            $("#step2").css("display", "block");
-            $("#btnstep1").attr("class", "center-block btn btn-default col-sm-6");
-            $("#btnstep2").attr("class", "center-block btn btn-warning col-sm-6");
-        }
+    function setv(objid,v) {
+        $(objid).find("option:contains('"+v+"')").attr("selected",true);
     }
-    function pre() {
-        $("#step1").css("display", "block");
-        $("#step2").css("display", "none");
-        $("#btnstep2").attr("class", "center-block btn btn-default col-sm-6");
-        $("#btnstep1").attr("class", "center-block btn btn-warning col-sm-6");
-    }
-
-    $("#fcz").fileinput({
-        language: 'zh',
-        uploadUrl: '<%=request.getContextPath()%>/addHouseSH!esf',
-        allowedFileExtensions: ['jpg', 'png', 'gif'],
-        overwriteInitial: false,
-        dropZoneEnabled: false,
-        maxFileCount: 4,
-        showCaption: false,
-        uploadAsync: false,
-        enctype: 'multipart/form-data',
-        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-        slugCallback: function (filename) {
-            return filename.replace('(', '_').replace(']', '_');
-        },
-        uploadExtraData: function () {
-            var datas = $("#hid").val();
-            var vcqz =   $("#cqz").val();
-            return {"hid":datas,"cqz":vcqz};
-        }
-    }).on("filebatchselected", function(event, files) {
-
-    }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-                response = data.response, reader = data.reader;
-        if ($.parseJSON(response).resultCode=="Succeed") {
-            alert('提交成功！');
-            history.go(0);
-        }else{
-            alert('请选择图片，不要其他文件！');
-        }
-    }); ;
 </script>
 </html>

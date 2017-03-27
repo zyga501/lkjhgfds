@@ -3,9 +3,7 @@ package com.wlfg.action;
 import com.opensymphony.xwork2.ActionContext;
 import com.wlfg.services.Httpclientweb;
 import com.wlfg.utils.StringsTools;
-import com.wlfg.weixin.utils.configSignature;
 import org.apache.struts2.ServletActionContext;
-import utils.ProjectSettings;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,8 +26,9 @@ public class serviceAction extends  AjaxActionSupport {
             getResponse().setContentType("text/html;charset=UTF-8");
             getRequest().setCharacterEncoding("utf-8");
             PrintWriter pw = getResponse().getWriter();
-            String nonceiStr = Long.toString(System.currentTimeMillis() / 1000);
-            String  appidstr = ProjectSettings.getMapData("weixinServerInfo").get("appid").toString();
+            //String nonceiStr = Long.toString(System.currentTimeMillis() / 1000);
+            //String  appidstr = ProjectSettings.getMaasdfasdf
+            // pData("weixinServerInfo").get("appid").toString();
             pw.println(responseString);
 //            pw.println("<script src=\"http://res.wx.qq.com/open/js/jweixin-1.1.0.js\"></script>"+
 //                    "<script src='../js/jquery/jquery.min.js'></script><script src='../js/wxdojs/wxgps.js'></script><script>var w=new wxjsobj('"+
