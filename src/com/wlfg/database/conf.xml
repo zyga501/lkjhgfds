@@ -21,6 +21,7 @@
 
     <mappers>
         <mapper resource="com/wlfg/database/mapping/menutree.xml" />
+        <mapper resource="com/wlfg/database/mapping/checkwork.xml" />
         <mapper resource="com/wlfg/database/esf/mapping/houseinfo.xml" />
         <mapper resource="com/wlfg/database/esf/mapping/agencyinfo.xml" />
     </mappers>

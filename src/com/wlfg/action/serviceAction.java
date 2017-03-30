@@ -2,16 +2,19 @@ package com.wlfg.action;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.wlfg.services.Httpclientweb;
+import com.wlfg.services.webgetpost;
 import com.wlfg.utils.StringsTools;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
+import java.util.*;
 
 public class serviceAction extends  AjaxActionSupport {
-    public void daka() throws IOException {
+    public String  daka() throws IOException {
         try {
             System.out.print(new String (getParameter("u").toString().getBytes("ISO8859-1"),"utf-8"));
             Httpclientweb httpclientweb = new Httpclientweb();
@@ -22,27 +25,30 @@ public class serviceAction extends  AjaxActionSupport {
             else
                 responseString = httpclientweb.dourl((new String (getParameter("u").toString().getBytes("ISO8859-1"),"utf-8")),
                         null==getParameter("p")?"123":getParameter("p").toString());
-            //System.out.print(responseString);
-            getResponse().setContentType("text/html;charset=UTF-8");
-            getRequest().setCharacterEncoding("utf-8");
-            PrintWriter pw = getResponse().getWriter();
-            //String nonceiStr = Long.toString(System.currentTimeMillis() / 1000);
-            //String  appidstr = ProjectSettings.getMaasdfasdf
-            // pData("weixinServerInfo").get("appid").toString();
-            pw.println(responseString);
-//            pw.println("<script src=\"http://res.wx.qq.com/open/js/jweixin-1.1.0.js\"></script>"+
-//                    "<script src='../js/jquery/jquery.min.js'></script><script src='../js/wxdojs/wxgps.js'></script><script>var w=new wxjsobj('"+
-//                    appidstr+"','"+nonceiStr+
-//                    "','"+nonceiStr+"','"+ configSignature.sign(JsapiTicketUtil.getJsApiTicket(appidstr),nonceiStr,nonceiStr, getRequest().getRequestURL().toString())+
-//                    "');</script>");
-            pw.flush();
-            pw.close();
+            Map map = new HashMap();
+            map.put("rt",responseString);
+            return AjaxActionComplete(map);
+//            getResponse().setContentType("text/html;charset=UTF-8");
+//            getRequest().setCharacterEncoding("utf-8");
+//            PrintWriter pw = getResponse().getWriter();
+//            pw.println(responseString);
+//            pw.flush();
+//            pw.close();
         } catch (Exception e) {
-            ((HttpServletResponse)ActionContext.getContext().get(ServletActionContext.HTTP_RESPONSE)).setCharacterEncoding("gbk");
-            PrintWriter pw = ((HttpServletResponse )ActionContext.getContext().get(ServletActionContext.HTTP_RESPONSE)).getWriter();
-            pw.println("Error!");
-            pw.flush();
-            pw.close();
+//            ((HttpServletResponse)ActionContext.getContext().get(ServletActionContext.HTTP_RESPONSE)).setCharacterEncoding("gbk");
+//            PrintWriter pw = ((HttpServletResponse )ActionContext.getContext().get(ServletActionContext.HTTP_RESPONSE)).getWriter();
+//            pw.println("Error!");
+//            pw.flush();
+//            pw.close();
+            return "page404";
         }
+    }
+
+    public String qqlbs() throws IOException {
+        String responsestr = webgetpost.geturl(getParameter("gourl").toString());
+        JSONObject jsonParse =JSONObject.fromObject(responsestr);
+        List<String> lp = new ArrayList<>();
+        lp.add(responsestr);
+        return AjaxActionComplete(lp);
     }
 }

@@ -365,6 +365,7 @@ public class EsfAction extends AjaxActionSupport {
     }
     public String houseinfo(){
         try {
+            if  (null==getParameter("hid"))  return "page404";
             List<HouseInfo> lhinfo = HouseInfo.getOnlineHouseInfo(new HashMap() {{
                 put("hid",getParameter("hid"));}});
             getRequest().setAttribute("hinfo", lhinfo.get(0));

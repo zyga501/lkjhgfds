@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wlfg.database.mapping.checkwork">
-    <select id="getAllData" parameterMap="java.util.HashMap"  resultMap="checkworkResult">
-        SELECT * FROM menutree where <if test="null!=uname"> and uname=#{uname}</if> <if test="null!=signdate1"> and (signdate between #{signdat1e} and #{signdate2})</if>
+    <select id="getAllData" parameterType="java.util.HashMap"  resultMap="checkworkResult">
+        SELECT * FROM CheckWork where <if test="null!=uname"> uname=#{uname}</if> <if test="null!=signtime1"> and (signtime between #{signtime1} and #{signtime2})</if>
     </select>
 
     <insert id="insertLog" parameterType="com.wlfg.database.MenuTree" >
-        insert into  menutree  (lx,ly,uname,signdate) values (#{lx},#{ly},#{uname},#{signdate})
+        insert into  CheckWork  (lx,ly,uname,signtime) values (#{lx},#{ly},#{uname},#{signtime})
     </insert>
-
 
     <resultMap type="com.wlfg.database.CheckWork" id="checkworkResult">
         <id property="id" column="id" jdbcType="BIGINT" />
         <result property="lx" column="lx" jdbcType="VARCHAR"/>
         <result property="ly" column="ly" jdbcType="VARCHAR"/>
         <result property="uname" column="uname" jdbcType="VARCHAR"/>
-        <result property="signdate" column="signdate" jdbcType="VARCHAR"/>
+        <result property="signtime" column="signtime" jdbcType="VARCHAR"/>
     </resultMap>
 </mapper>

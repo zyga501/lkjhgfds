@@ -1,11 +1,14 @@
 package com.wlfg.action;
 
 import com.wlfg.database.CheckWork;
+import com.wlfg.services.webgetpost;
 import com.wlfg.weixin.api.JsapiTicket;
 import com.wlfg.weixin.api.QYAccessToken;
 import com.wlfg.weixin.api.QYUserId;
 import com.wlfg.weixin.api.QYUserIdInfo;
 import com.wlfg.weixin.utils.configSignature;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.xml.sax.SAXException;
 import utils.ProjectSettings;
 
@@ -13,10 +16,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static com.wlfg.services.TencentMap.getDistance;
 
 
 public class QyAction extends AjaxActionSupport {
@@ -78,14 +80,24 @@ public class QyAction extends AjaxActionSupport {
     }
 
     public String gpsinfo(){
+        if (null==getRequest().getSession().getAttribute("openid")) {
+            setParameter("redirect_url", "QYAct!gpsinfo");
+            return "fetchWxCode";
+        }
         return "getLocation";
     }
     public String getgps() throws IOException {
 
+        float dis = getDistance(getParameter("lx").toString(),getParameter("ly").toString(),"28.384680","121.383991");
+        if (dis>200 || dis<0){
+            Map map = new HashMap();
+            map.put("rt","距离太远，请就近打卡！");
+            return AjaxActionComplete(map);
+        }
         CheckWork ck= new CheckWork();
         ck.setLx(getParameter("lx").toString());
         ck.setLy(getParameter("ly").toString());
-        ck.setSigndate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
+        ck.setSigntime((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
         try {
             QYUserIdInfo qyUserIdInfo = new QYUserIdInfo(QYAccessToken.getQYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString()),
                     getRequest().getSession().getAttribute("openid").toString());
@@ -126,7 +138,7 @@ public class QyAction extends AjaxActionSupport {
         resultMap.put("timeStamp", nonceiStr);
         resultMap.put("nonceStr", nonceiStr);
         String sginstr = configSignature.sign(JsapiTicket.getJsApiTicket(appidstr),nonceiStr,nonceiStr,
-                getRequest().getScheme() + "://" + getRequest().getServerName()+getRequest().getContextPath()+"/getLocation.jsp");
+                getRequest().getScheme() + "://" + getRequest().getServerName()+getRequest().getContextPath()+"/QYAct!gpsinfo");
         resultMap.put("signature", sginstr);
         return AjaxActionComplete(resultMap);
     }
@@ -177,5 +189,32 @@ public class QyAction extends AjaxActionSupport {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String  getsignpos(){
+        try {
+            QYUserIdInfo qyUserIdInfo = new QYUserIdInfo(QYAccessToken.getQYAccessToken(ProjectSettings.getMapData("weixinServerInfo").get("qyappid").toString()),
+                    getRequest().getSession().getAttribute("openid").toString());
+            if (qyUserIdInfo.getRequest()) {
+                List<CheckWork> lc =  CheckWork.getAllData(new HashMap() {{
+                    put("uname",qyUserIdInfo.getMsgMap().get("name").toString());}});
+                String posarr="" ;
+                for (CheckWork  c:lc) {
+                    posarr+=c.getLx()+","+c.getLy()+";";
+                }
+                posarr = posarr.substring(0,posarr.length()-1);
+                String responsestr = webgetpost.geturl("http://apis.map.qq.com/ws/coord/v1/translate?locations="+posarr +
+                               "&type=1&key=ZO4BZ-BZXK4-JN2UU-DIZMB-OWDS5-UKBVD");
+                JSONObject jsonParse =JSONObject.fromObject(responsestr);
+                List<String> lp = new ArrayList<>();
+                if (jsonParse.containsKey("locations")) {
+                    lp = JSONArray.toList(JSONArray.fromObject(jsonParse.get("locations")));
+                }
+                return AjaxActionComplete(lp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "page404";
     }
 }

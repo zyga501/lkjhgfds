@@ -1,6 +1,6 @@
 package com.wlfg.database;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +19,7 @@ public class CheckWork {
     private String lx_;
     private String ly_;
     private String uname;
-    private String signdate;
+    private String signtime;
 
     public long getId() {
         return id_;
@@ -53,11 +53,11 @@ public class CheckWork {
         this.uname = uname;
     }
 
-    public String getSigndate() {
-        return signdate;
+    public String getSigntime() {
+        return signtime;
     }
 
-    public void setSigndate(String signdate) {
-        this.signdate = signdate;
+    public void setSigntime(String signtime) {
+        this.signtime = signtime;
     }
 }

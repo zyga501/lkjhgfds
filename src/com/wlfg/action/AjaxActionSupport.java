@@ -97,6 +97,10 @@ public class AjaxActionSupport extends ActionSupport {
         ajaxActionResult_ = JSONObject.fromObject(resultMap).toString();
         return AJAXACTIONCOMPLETED;
     }
+    public String AjaxActionComplete( String  jsonstr) {
+        ajaxActionResult_ = jsonstr;
+        return AJAXACTIONCOMPLETED;
+    }
 
     public String AjaxActionComplete(List resultList) {
         ajaxActionResult_ = JSONArray.fromObject(resultList).toString();
